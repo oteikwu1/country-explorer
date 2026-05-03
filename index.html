@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Country Explorer</title>
+</head>
+<body>
+<header class="main-container">
+  <nav class="nav-bar">
+    <div class="nav-titlte">
+      <p class="logo">
+        Where in the world?
+      </p>
+    </div>
+
+    <button id="dark-theme" class="toggle-container">
+      <img src="assets/toggle-icon.png" alt="toggle-icon" class="toggle-icon" data-toggle-btn>
+      <p class="dark-mode-text">
+        Dark Mode
+      </p>
+    </button>
+    </nav>
+</header>
+
+ <main class="main-container">
+
+  <div class="search-filter-container">
+  <div class="search-input">
+    <img src="assets/search-icon.png" alt="" class="search-icon">
+    <input type="text" name="search" id="search"
+    placeholder="search for a content...">
+  </div>
+
+  <select name="country" id="country" class="drop-down">
+    <option value="Filter by Region">Filter by Region</option>
+    <option value="Africa">Africa</option>
+    <option value="America">America</option>
+    <option value="Asia">Asia</option>
+    <option value="Europe">Europe</option>
+    <option value="Oceania">Oceania</option>
+  </select>
+  </div>
+  <button class="btn">search</button>
+  <div class="display-container">
+    
+  </div>
+ </main>
+
+ <script src="script.js"></script>
+</body>
+</html>
