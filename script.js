@@ -16,7 +16,7 @@ function toggleBackground() {
 toggleBtn.addEventListener('click', toggleBackground);
 
 const apiKey =
-  'https://restcountries.com/v3.1/all?fields=name,flags,currencies,capital';
+  'https://restcountries.com/v3.1/all?fields=name,flags,currencies,capital,population,region';
 
   console.log(apiKey);
 
@@ -60,10 +60,10 @@ function displayCountry(countries) {
          alt="${country.flags.alt || country.name.common + ' flag'}" 
          class="country-flag">
     
-    <h2>${country.name.common}</h2>
-    <p><b>Population:</b> ${population.toLocaleString()}</p>
-    <p><b>Region:</b> ${region}</p>
-    <p><b>Capital:</b> ${capital}</p>
+    <h2 class="country-name">${country.name.common}</h2>
+    <p class="country-population"><b>Population:</b> ${population.toLocaleString('en-IN')}</p>
+    <p class="country-region"><b>Region:</b> ${region}</p>
+    <p class="country-capital"><b>Capital:</b> ${capital}</p>
   </div>
     `;
    displayContainer.appendChild(countryList);
