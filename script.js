@@ -1,76 +1,101 @@
 const toggleBtn = document.getElementById('dark-theme');
 const searchInput = document.getElementById('search');
- const displayContainer = document.querySelector('.display-container');
- const dropdown = document.getElementById('country');
+const displayContainer = document.querySelector('.display-container');
+const continentSelect = document.getElementById('continent');
 
 function toggleBackground() {
   const toggleMode = document.body;
   toggleMode.classList.toggle('dark-mode');
 
-  const text = document.querySelector('.dark-mode-text');
-  text.textContent = document.toggleMode.classList.contains('dark-mode')
-    ? 'Light Mode'
-    : 'Dark Mode';
 }
 
 toggleBtn.addEventListener('click', toggleBackground);
 
-const apiKey =
-  'https://restcountries.com/v3.1/all?fields=name,flags,currencies,capital,population,region';
+const apiKey = `https://restcountries.com/v3.1/all?fields=name,flags,currencies,capital,population,region`;
 
-  console.log(apiKey);
+let allCountries = [];
 
-async function renderCountry() {
+https: console.log(apiKey);
+
+async function fetchCountries() {
+
   try {
-    let response = await fetch(apiKey);
- 
+    const response = await fetch(apiKey);
+   
+      
     if (!response.ok) {
       throw new Error(`status ${response.status}`);
     }
 
-    let data = await response.json();
-    displayCountry(data);
+    allCountries = await response.json();
+    displayCountry(allCountries);
 
   } catch (err) {
-    console.error("Error:", err)
-
+    console.error('Error:', err);
   }
-};
-renderCountry();
-function displayCountry(countries) {
+}
+fetchCountries();
+
+function displayCountry(countriesData) {
+ if (!Array.isArray(countriesData)) return;
 
   displayContainer.innerHTML = '';
 
-  countries.forEach((country) => {
-   const name = country.name.common;
-  const population = country.population
-    ? country.population.toLocaleString()
-    : 'N/A';
-   const region = country.region;
-   const capital = country.capital ? country.capital.join(', ') : 'N/A';
+  countriesData.forEach((country) => {
+    const name = country.name.common;
+    const region = country.region;
+    const capital = country.capital ? country.capital.join(', ') : 'N/A';
 
-   const countryList = document.createElement('div');
+    const populationDisplay = country.population
+      ? country.population.toLocaleString('en-IN')
+      : 'N/A';
 
-   countryList.classList.add('country-list');
+    const countryList = document.createElement('div');
+    countryList.classList.add('country-list');
 
-   countryList.innerHTML = `
-  
-    <div class="country-info">
-    <img src="${country.flags.png}" 
-         alt="${country.flags.alt || country.name.common + ' flag'}" 
-         class="country-flag">
-    
-    <h2 class="country-name">${country.name.common}</h2>
-    <p class="country-population"><b>Population:</b> ${population.toLocaleString('en-IN')}</p>
-    <p class="country-region"><b>Region:</b> ${region}</p>
-    <p class="country-capital"><b>Capital:</b> ${capital}</p>
-  </div>
+    countryList.innerHTML = `
+      <div class="country-info">
+        <img src="${country.flags.png}" 
+             alt="${country.flags.alt || name + ' flag'}" 
+             class="country-flag">
+        
+        <h2 class="country-name">${name}</h2>
+        <p class="country-population"><b>Population:</b> ${populationDisplay}</p>
+        <p class="country-region"><b>Region:</b> ${region}</p>
+        <p class="country-capital"><b>Capital:</b> ${capital}</p>
+      </div>
     `;
-   displayContainer.appendChild(countryList);
- });
+    displayContainer.appendChild(countryList);
+  });
 };
 
+// Event listener for dropdown selection
+continentSelect.addEventListener('change', (e) => {
+  const selectedContinent = e.target.value;
+
+  if (selectedContinent === 'All') {
+    displayCountry(allCountries);
+  } else {
+    const filteredCountries = allCountries.filter((country) => {
+     return country.region === selectedContinent;
+    });
+    displayCountry(filteredCountries);
+  }
+});
 
 
-const searchBtn = document.querySelector('.btn');
-searchBtn.addEventListener('click', renderCountry);
+// Event listener for search input
+searchInput.addEventListener('input', () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  const countryLists = document.querySelectorAll('.country-list');
+  countryLists.forEach((countryList) => {
+    const countryName = countryList
+      .querySelector('.country-name')
+      .textContent.toLowerCase();
+    if (countryName.includes(searchTerm)) {
+      countryList.style.display = 'block';
+    } else {
+      countryList.style.display = 'none';
+    }
+  });
+});
